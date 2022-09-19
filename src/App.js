@@ -101,34 +101,22 @@ function TextArea() {
   const [bottomText, setBottomText] = useState('');
   const [meme, setMeme] = useState('pigeon');
   const [image, setImage] = useState(
-    'https://api.memegen.link/images/pigeon/hey/beautiful.png',
+    `https://api.memegen.link/images/pigeon/hi/there.png`,
   );
 
   // Function for escaping not allowed Character
   function escapingCharacters(input) {
-    if (input === ' ') {
-      return '_';
-    } else if (input === '_') {
-      return '__';
-    } else if (input === '-') {
-      return '--';
-    } else if (input === '?') {
-      return '~q';
-    } else if (input === '&') {
-      return '~a';
-    } else if (input === '%') {
-      return '~p';
-    } else if (input === '#') {
-      return '~h';
-    } else if (input === '/') {
-      return '~s';
-    } else if (input === '\\') {
-      return '~b';
-    } else if (input === '"') {
-      return "''";
-    } else {
-      return input;
-    }
+    let text = input.replaceAll('%', '~p');
+    text = input.replaceAll('_', '__');
+    text = input.replaceAll('-', '--');
+    text = input.replaceAll('?', '~q');
+    text = input.replaceAll('&', '~a');
+    text = input.replaceAll('#', '~h');
+    text = input.replaceAll('/', '~s');
+    text = input.replaceAll('\\', '~b');
+    text = input.replaceAll('"', "''");
+    text = input.replaceAll('&', '~a');
+    return input;
   }
 
   // Download image
@@ -158,9 +146,7 @@ function TextArea() {
             setImage(
               `https://api.memegen.link/images/${escapingCharacters(
                 meme,
-              )}/${escapingCharacters(topText)}/${escapingCharacters(
-                bottomText,
-              )}.png`,
+              )}/${escapingCharacters(event.target.value)}.png`,
             );
           }}
         />
@@ -177,7 +163,7 @@ function TextArea() {
               `https://api.memegen.link/images/${escapingCharacters(
                 meme,
               )}/${escapingCharacters(topText)}/${escapingCharacters(
-                bottomText,
+                event.target.value,
               )}.png`,
             );
           }}
