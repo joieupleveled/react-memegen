@@ -105,19 +105,6 @@ function TextArea() {
   );
 
   // Function for escaping not allowed Character
-  function escapingCharacters(input) {
-    let text = input.replaceAll('%', '~p');
-    text = input.replaceAll('_', '__');
-    text = input.replaceAll('-', '--');
-    text = input.replaceAll('?', '~q');
-    text = input.replaceAll('&', '~a');
-    text = input.replaceAll('#', '~h');
-    text = input.replaceAll('/', '~s');
-    text = input.replaceAll('\\', '~b');
-    text = input.replaceAll('"', "''");
-    text = input.replaceAll('&', '~a');
-    return input;
-  }
 
   // Download image
   function downloadImage() {
@@ -125,6 +112,20 @@ function TextArea() {
       `https://api.memegen.link/images/${meme}/${topText}/${bottomText}.png`,
       'image.jpg',
     );
+  }
+
+  function escapingCharacters(input) {
+    let altText = input.replaceAll('%20', '~p');
+    altText = input.replaceAll('_', '__');
+    altText = input.replaceAll('-', '--');
+    altText = input.replaceAll('?', '~q');
+    altText = input.replaceAll('&', '~a');
+    altText = input.replaceAll('#', '~h');
+    altText = input.replaceAll('/', '~s');
+    altText = input.replaceAll('\\', '~b');
+    altText = input.replaceAll('"', "''");
+    altText = input.replaceAll('&', '~a');
+    return altText;
   }
 
   return (
@@ -142,7 +143,7 @@ function TextArea() {
         <input
           value={topText}
           onChange={(event) => {
-            setTopText(event.target.value);
+            setTopText(event.currentTarget.value);
             setImage(
               `https://api.memegen.link/images/${escapingCharacters(
                 meme,
