@@ -3,6 +3,94 @@ import './App.css';
 import { saveAs } from 'file-saver';
 import React, { useState } from 'react';
 
+// // Component 1st before the main function App
+
+// function TextArea() {
+//   // Declare the parts that might change in Zukunf
+//   // A. Top Text B. Bottom Text C. Meme URL D. Meme Template
+
+//   const [topText, setTopText] = useState('');
+//   const [bottomText, setBottomText] = useState('');
+//   const [url, setUrl] = useState('https://api.memegen.link/images/pigeon.png');
+//   const [meme, setMeme] = useState('');
+
+//   // Download image
+//   function downloadImage() {
+//     saveAs(
+//       `https://api.memegen.link/images/${meme}/${topText}/${bottomText}.png`,
+//       'image.jpg',
+//     );
+//   }
+
+//   return (
+//     <div className="main-content">
+//       {/* Download image function */}
+//       <div className="memeContainer">
+//         <img src={url} alt="meme" data-test-id="meme-image" />
+//       </div>
+
+//       <h1>Customise your meme here</h1>
+
+//       {/* Top Text input */}
+//       <label className="meme-top-caption">
+//         Top text
+//         <input
+//           value={topText}
+//           onChange={(event) => {
+//             setTopText(event.currentTarget.value);
+//           }}
+//         />
+//       </label>
+
+//       {/* Bottom Text input */}
+//       <label className="meme-bottom-caption">
+//         Bottom text
+//         <input
+//           value={bottomText}
+//           onChange={(event) => {
+//             setBottomText(event.currentTarget.value);
+//           }}
+//         />
+//       </label>
+
+//       {/* Create form to submit with changed image */}
+//       <form
+//         onSubmit={(event) => {
+//           event.preventDefault();
+//           setUrl(
+//             `https://api.memegen.link/images/${meme}/${topText}/${bottomText}.png`,
+//           );
+//         }}
+//       >
+//         {/* Changing meme template */}
+//         <label>
+//           Meme template
+//           <input
+//             value={meme}
+//             onChange={(event) => {
+//               setMeme(event.currentTarget.value);
+//             }}
+//           />
+//         </label>
+//       </form>
+
+//       {/* Generate Meme Button to click with applied changes */}
+//       <button
+//         onClick={() => {
+//           setUrl(
+//             `https://api.memegen.link/images/${meme}/${topText}/${bottomText}.png`,
+//           );
+//         }}
+//       >
+//         Generate a Meme
+//       </button>
+
+//       {/* Create button to download img */}
+//       <button onClick={downloadImage}>Download</button>
+//     </div>
+//   );
+// }
+
 // Component 1st before the main function App
 
 function TextArea() {
@@ -11,10 +99,39 @@ function TextArea() {
 
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
-  const [url, setUrl] = useState('https://api.memegen.link/images/pigeon.png');
-  const [meme, setMeme] = useState('');
+  const [meme, setMeme] = useState('pigeon');
+  const [image, setImage] = useState(
+    'https://api.memegen.link/images/pigeon/hey/beautiful.png',
+  );
 
-  // Download image function
+  // Function for escaping not allowed Character
+  function escapingCharacters(input) {
+    if (input === ' ') {
+      return '_';
+    } else if (input === '_') {
+      return '__';
+    } else if (input === '-') {
+      return '--';
+    } else if (input === '?') {
+      return '~q';
+    } else if (input === '&') {
+      return '~a';
+    } else if (input === '%') {
+      return '~p';
+    } else if (input === '#') {
+      return '~h';
+    } else if (input === '/') {
+      return '~s';
+    } else if (input === '\\') {
+      return '~b';
+    } else if (input === '"') {
+      return "''";
+    } else {
+      return input;
+    }
+  }
+
+  // Download image
   function downloadImage() {
     saveAs(
       `https://api.memegen.link/images/${meme}/${topText}/${bottomText}.png`,
@@ -26,7 +143,7 @@ function TextArea() {
     <div className="main-content">
       {/* Download image function */}
       <div className="memeContainer">
-        <img src={url} alt="meme" data-test-id="meme-image" />
+        <img src={image} alt="Meme" data-test-id="meme-image" />
       </div>
 
       <h1>Customise your meme here</h1>
@@ -37,7 +154,14 @@ function TextArea() {
         <input
           value={topText}
           onChange={(event) => {
-            setTopText(event.currentTarget.value);
+            setTopText(event.target.value);
+            setImage(
+              `https://api.memegen.link/images/${escapingCharacters(
+                meme,
+              )}/${escapingCharacters(topText)}/${escapingCharacters(
+                bottomText,
+              )}.png`,
+            );
           }}
         />
       </label>
@@ -48,7 +172,14 @@ function TextArea() {
         <input
           value={bottomText}
           onChange={(event) => {
-            setBottomText(event.currentTarget.value);
+            setBottomText(event.target.value);
+            setImage(
+              `https://api.memegen.link/images/${escapingCharacters(
+                meme,
+              )}/${escapingCharacters(topText)}/${escapingCharacters(
+                bottomText,
+              )}.png`,
+            );
           }}
         />
       </label>
@@ -57,8 +188,12 @@ function TextArea() {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          setUrl(
-            `https://api.memegen.link/images/${meme}/${topText}/${bottomText}.png`,
+          setImage(
+            `https://api.memegen.link/images/${escapingCharacters(
+              meme,
+            )}/${escapingCharacters(topText)}/${escapingCharacters(
+              bottomText,
+            )}.png`,
           );
         }}
       >
@@ -67,9 +202,7 @@ function TextArea() {
           Meme template
           <input
             value={meme}
-            onChange={(event) => {
-              setMeme(event.currentTarget.value);
-            }}
+            onChange={(event) => setMeme(event.target.value)}
           />
         </label>
       </form>
@@ -77,12 +210,16 @@ function TextArea() {
       {/* Generate Meme Button to click with applied changes */}
       <button
         onClick={() => {
-          setUrl(
-            `https://api.memegen.link/images/${meme}/${topText}/${bottomText}.png`,
+          setImage(
+            `https://api.memegen.link/images/${escapingCharacters(
+              meme,
+            )}/${escapingCharacters(topText)}/${escapingCharacters(
+              bottomText,
+            )}.png`,
           );
         }}
       >
-        Generate a Meme
+        Generate
       </button>
 
       {/* Create button to download img */}
